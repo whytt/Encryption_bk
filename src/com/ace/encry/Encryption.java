@@ -81,7 +81,7 @@ public class Encryption {
 	 */
 	public static String encrypt(String data, String key) throws Exception {
 		return encryptBASE64(encrypt(data.getBytes(),
-				encryptMD5(key.getBytes())));
+				encryptMD5(key.getBytes()))).trim();
 	}
 
 	/**
