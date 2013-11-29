@@ -7,6 +7,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,8 +32,8 @@ import com.ace.encry.util.Utils;
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 2746224826281328077L;
-	private static final int HEIGHT = 550;
-	private static final int WIDTH = 650;
+	private static final int HEIGHT = 450;
+	private static final int WIDTH = 500;
 	private JTextArea inputArea;
 	private JTextArea outputArea;
 	private JPasswordField keyField;
@@ -52,6 +53,7 @@ public class MainFrame extends JFrame {
 		setSize(WIDTH, HEIGHT);
 		setResizable(false);
 		setLocationCenter();
+		setIcon();
 		setTitle("加密/解密");
 		setContentPane(getJContentPane());
 	}
@@ -67,22 +69,29 @@ public class MainFrame extends JFrame {
 				(displaySize.height - frameSize.height) / 2);
 	}
 
+	private void setIcon(){
+		Image image=Toolkit.getDefaultToolkit().createImage("file/icon.png");
+		this.setIconImage(image);
+	}
+
 	private Container getJContentPane() {
 		JPanel jPanel = new JPanel(new BorderLayout());
 		jPanel.add(getPanelNorth(), BorderLayout.NORTH);
-		jPanel.add(getPanelCenter(),BorderLayout.CENTER);
+		jPanel.add(getPanelCenter(), BorderLayout.CENTER);
 		jPanel.add(getPanelBottom(), BorderLayout.SOUTH);
 		jPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		return jPanel;
 	}
-	
+
+	/** 密钥、消息 */
 	private Component getPanelNorth() {
 		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		jPanel.add(new JLabel("密钥:"));
 		jPanel.add(getJPasswordField());
+		jPanel.add(getMsgLabel());
 		return jPanel;
 	}
-	
+
 	private Component getJPasswordField() {
 		if (keyField == null) {
 			keyField = new JPasswordField(15);
@@ -90,6 +99,15 @@ public class MainFrame extends JFrame {
 		}
 		return keyField;
 	}
+
+	private Component getMsgLabel() {
+		if (null == msgLabel) {
+			msgLabel = new JLabel();
+		}
+		return msgLabel;
+	}
+
+	/** 输入输出框 */
 
 	private Component getPanelCenter() {
 		JPanel jPanel = new JPanel(new GridLayout(1, 2));
@@ -100,29 +118,9 @@ public class MainFrame extends JFrame {
 
 	private Component getPanelInput() {
 		JPanel jPanel = new JPanel(new BorderLayout());
-		jPanel.add(new JLabel("输入:"),BorderLayout.NORTH);
-		jPanel.add(getInputArea(),BorderLayout.CENTER);
-		jPanel.add(getPanelClear(),BorderLayout.SOUTH);
-		return jPanel;
-	}
-	
-	private Component getPanelOutput() {
-		JPanel jPanel = new JPanel(new BorderLayout());
-		jPanel.add(new JLabel("输出:"),BorderLayout.NORTH);
-		jPanel.add(getJOutputArea(),BorderLayout.CENTER);
-		jPanel.add(getPanelCopy(),BorderLayout.SOUTH);
-		return jPanel;
-	}
-	
-	private Component getPanelClear() {
-		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		jPanel.add(getClearBtn(),BorderLayout.SOUTH);
-		return jPanel;
-	}
-
-	private Component getPanelCopy() {
-		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		jPanel.add(getCopyBtn(),BorderLayout.SOUTH);
+		jPanel.add(new JLabel("输入:"), BorderLayout.NORTH);
+		jPanel.add(getInputArea(), BorderLayout.CENTER);
+		jPanel.add(getPanelClear(), BorderLayout.SOUTH);
 		return jPanel;
 	}
 
@@ -130,46 +128,20 @@ public class MainFrame extends JFrame {
 		if (inputArea == null) {
 			inputArea = new JTextArea();
 			inputArea.setTabSize(4);
-		//	inputArea.setRows(10);
-			inputArea.setLineWrap(true);// 激活自动换行功能  
-			inputArea.setWrapStyleWord(true);// 激活断行不断字功能 
-			inputArea.setBackground(Color.white);  
+			inputArea.setRows(5);
+			inputArea.setLineWrap(true);// 激活自动换行功能
+			inputArea.setWrapStyleWord(true);// 激活断行不断字功能
+			inputArea.setBackground(Color.white);
 			inputArea.setAutoscrolls(true);
 		}
 		JScrollPane inputScroll = new JScrollPane(inputArea);
 		return inputScroll;
 	}
 
-	private Component getJOutputArea() {
-		if (outputArea == null) {
-			outputArea = new JTextArea();
-			outputArea.setTabSize(4);
-		//	outputArea.setRows(10);
-			outputArea.setLineWrap(true);// 激活自动换行功能  
-			outputArea.setWrapStyleWord(true);// 激活断行不断字功能 
-			outputArea.setBackground(Color.white);  
-		//	outputArea.setEditable(false);
-			outputArea.setAutoscrolls(true);
-		}
-		JScrollPane outputScroll = new JScrollPane(outputArea);
-		return outputScroll;
-	}
-
-	private Component getPanelBottom() {
-		JPanel jPanel = new JPanel(new FlowLayout());
-		jPanel.add(getEncryptBtn());
-		jPanel.add(getDecryptBtn());
-		jPanel.add(getCopyBtn());
-		jPanel.add(getMsgLabel());
+	private Component getPanelClear() {
+		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		jPanel.add(getClearBtn(), BorderLayout.SOUTH);
 		return jPanel;
-	}
-	
-
-	private Component getMsgLabel() {
-		if (null == msgLabel) {
-			msgLabel = new JLabel();
-		}
-		return msgLabel;
 	}
 
 	private Component getClearBtn() {
@@ -180,12 +152,42 @@ public class MainFrame extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					inputArea.setText("");
+					inputArea.requestFocus();
 				}
 			});
 		}
 		return clearBtn;
 	}
-	
+
+	private Component getPanelOutput() {
+		JPanel jPanel = new JPanel(new BorderLayout());
+		jPanel.add(new JLabel("输出:"), BorderLayout.NORTH);
+		jPanel.add(getJOutputArea(), BorderLayout.CENTER);
+		jPanel.add(getPanelCopy(), BorderLayout.SOUTH);
+		return jPanel;
+	}
+
+	private Component getJOutputArea() {
+		if (outputArea == null) {
+			outputArea = new JTextArea();
+			outputArea.setTabSize(4);
+			outputArea.setRows(5);
+			outputArea.setLineWrap(true);// 激活自动换行功能
+			outputArea.setWrapStyleWord(true);// 激活断行不断字功能
+			outputArea.setBackground(Color.white);
+			outputArea.setEditable(false);
+			outputArea.setAutoscrolls(true);
+		}
+		JScrollPane outputScroll = new JScrollPane(outputArea);
+		return outputScroll;
+	}
+
+	private Component getPanelCopy() {
+		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		jPanel.add(getCopyBtn(), BorderLayout.SOUTH);
+		return jPanel;
+	}
+
 	private Component getCopyBtn() {
 		if (null == copyBtn) {
 			copyBtn = new JButton("复制");
@@ -194,10 +196,21 @@ public class MainFrame extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					Utils.copyText2Clipboard(outputArea.getText());
+					msgLabel.setForeground(null);
+					msgLabel.setText("已复制结果到剪贴版");
 				}
 			});
 		}
 		return copyBtn;
+	}
+
+	/** 底部按钮 */
+
+	private Component getPanelBottom() {
+		JPanel jPanel = new JPanel(new FlowLayout());
+		jPanel.add(getEncryptBtn());
+		jPanel.add(getDecryptBtn());
+		return jPanel;
 	}
 
 	private Component getEncryptBtn() {
@@ -228,7 +241,9 @@ public class MainFrame extends JFrame {
 
 	/**
 	 * 加密解密事件
-	 * @param flag 为true时表示加密    false表示解密
+	 * 
+	 * @param flag
+	 *            为true时表示加密 false表示解密
 	 */
 	private void action(boolean flag) {
 		String data = inputArea.getText().trim();
@@ -267,7 +282,5 @@ public class MainFrame extends JFrame {
 			}
 		}
 		outputArea.setText(result);
-		Utils.copyText2Clipboard(result);
-		msgLabel.setText("已复制结果到剪贴版");
 	}
 }
