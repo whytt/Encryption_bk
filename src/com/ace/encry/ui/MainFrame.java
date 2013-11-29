@@ -1,4 +1,4 @@
-package com.ace.encry;
+package com.ace.encry.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,6 +21,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import com.ace.encry.util.EncryptUtil;
 import com.ace.encry.util.Utils;
 
 /**
@@ -265,7 +266,7 @@ public class MainFrame extends JFrame {
 		/** 加密 */
 		if (flag) {
 			try {
-				result = Encryption.encrypt(data, key);
+				result = EncryptUtil.encrypt(data, key);
 			} catch (Exception e) {
 				msgLabel.setForeground(Color.red);
 				msgLabel.setText("加密失败");
@@ -274,7 +275,7 @@ public class MainFrame extends JFrame {
 		} else {
 			/** 解密 */
 			try {
-				result = Encryption.decrypt(data, key);
+				result = EncryptUtil.decrypt(data, key);
 			} catch (Exception e) {
 				msgLabel.setForeground(Color.red);
 				msgLabel.setText("解密失败，请确认密钥是否正确");

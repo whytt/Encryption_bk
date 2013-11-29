@@ -1,4 +1,4 @@
-package com.ace.encry;
+package com.ace.encry.util;
 
 import java.security.Key;
 import java.security.MessageDigest;
@@ -16,7 +16,7 @@ import sun.misc.BASE64Encoder;
  * @author Ace
  *
  */
-public class Encryption {
+public class EncryptUtil {
 
 	public static final String ALGORITHM = "DES";
 
