@@ -71,7 +71,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setIcon(){
-		Image image=Toolkit.getDefaultToolkit().createImage("file/icon.png");
+		Image image=Toolkit.getDefaultToolkit().createImage(getClass().getResource("icon.png"));
 		this.setIconImage(image);
 	}
 
