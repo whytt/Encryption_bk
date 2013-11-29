@@ -1,21 +1,24 @@
 package com.ace.encry;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import com.ace.encry.util.Utils;
 
@@ -28,15 +31,15 @@ import com.ace.encry.util.Utils;
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 2746224826281328077L;
-	private static final int HEIGHT = 250;
-	private static final int WIDTH = 350;
-	private JTextField dataField;
+	private static final int HEIGHT = 550;
+	private static final int WIDTH = 650;
+	private JTextArea inputArea;
+	private JTextArea outputArea;
 	private JPasswordField keyField;
-	private JTextField outputField;
 	private JButton encryptBtn;
 	private JButton decryptBtn;
 	private JButton clearBtn;
-	private JCheckBox autoCopyCheckBox;
+	private JButton copyBtn;
 	private JLabel msgLabel;
 
 	public MainFrame() {
@@ -65,21 +68,102 @@ public class MainFrame extends JFrame {
 	}
 
 	private Container getJContentPane() {
-		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		jPanel.add(getPanelTop());
-		jPanel.add(getPanelCenter());
-		jPanel.add(getPanelCenter2());
-		jPanel.add(getPanelBottom());
-		jPanel.add(getPanelBottom2());
-		jPanel.setBorder(BorderFactory.createEmptyBorder(20,20,10,20));
+		JPanel jPanel = new JPanel(new BorderLayout());
+		jPanel.add(getPanelNorth(), BorderLayout.NORTH);
+		jPanel.add(getPanelCenter(),BorderLayout.CENTER);
+		jPanel.add(getPanelBottom(), BorderLayout.SOUTH);
+		jPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		return jPanel;
+	}
+	
+	private Component getPanelNorth() {
+		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		jPanel.add(new JLabel("密钥:"));
+		jPanel.add(getJPasswordField());
+		return jPanel;
+	}
+	
+	private Component getJPasswordField() {
+		if (keyField == null) {
+			keyField = new JPasswordField(15);
+			keyField.setEchoChar('*');
+		}
+		return keyField;
+	}
+
+	private Component getPanelCenter() {
+		JPanel jPanel = new JPanel(new GridLayout(1, 2));
+		jPanel.add(getPanelInput());
+		jPanel.add(getPanelOutput());
 		return jPanel;
 	}
 
-	private Component getPanelBottom2() {
-		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+	private Component getPanelInput() {
+		JPanel jPanel = new JPanel(new BorderLayout());
+		jPanel.add(new JLabel("输入:"),BorderLayout.NORTH);
+		jPanel.add(getInputArea(),BorderLayout.CENTER);
+		jPanel.add(getPanelClear(),BorderLayout.SOUTH);
+		return jPanel;
+	}
+	
+	private Component getPanelOutput() {
+		JPanel jPanel = new JPanel(new BorderLayout());
+		jPanel.add(new JLabel("输出:"),BorderLayout.NORTH);
+		jPanel.add(getJOutputArea(),BorderLayout.CENTER);
+		jPanel.add(getPanelCopy(),BorderLayout.SOUTH);
+		return jPanel;
+	}
+	
+	private Component getPanelClear() {
+		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		jPanel.add(getClearBtn(),BorderLayout.SOUTH);
+		return jPanel;
+	}
+
+	private Component getPanelCopy() {
+		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		jPanel.add(getCopyBtn(),BorderLayout.SOUTH);
+		return jPanel;
+	}
+
+	private Component getInputArea() {
+		if (inputArea == null) {
+			inputArea = new JTextArea();
+			inputArea.setTabSize(4);
+		//	inputArea.setRows(10);
+			inputArea.setLineWrap(true);// 激活自动换行功能  
+			inputArea.setWrapStyleWord(true);// 激活断行不断字功能 
+			inputArea.setBackground(Color.white);  
+			inputArea.setAutoscrolls(true);
+		}
+		JScrollPane inputScroll = new JScrollPane(inputArea);
+		return inputScroll;
+	}
+
+	private Component getJOutputArea() {
+		if (outputArea == null) {
+			outputArea = new JTextArea();
+			outputArea.setTabSize(4);
+		//	outputArea.setRows(10);
+			outputArea.setLineWrap(true);// 激活自动换行功能  
+			outputArea.setWrapStyleWord(true);// 激活断行不断字功能 
+			outputArea.setBackground(Color.white);  
+		//	outputArea.setEditable(false);
+			outputArea.setAutoscrolls(true);
+		}
+		JScrollPane outputScroll = new JScrollPane(outputArea);
+		return outputScroll;
+	}
+
+	private Component getPanelBottom() {
+		JPanel jPanel = new JPanel(new FlowLayout());
+		jPanel.add(getEncryptBtn());
+		jPanel.add(getDecryptBtn());
+		jPanel.add(getCopyBtn());
 		jPanel.add(getMsgLabel());
 		return jPanel;
 	}
+	
 
 	private Component getMsgLabel() {
 		if (null == msgLabel) {
@@ -88,91 +172,32 @@ public class MainFrame extends JFrame {
 		return msgLabel;
 	}
 
-	private Component getPanelCenter2() {
-		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		jPanel.add(new JLabel("加密/解密结果:"));
-		jPanel.add(getJOutputArea());
-		jPanel.add(getCopyBtn());
-		return jPanel;
-	}
-	
 	private Component getClearBtn() {
 		if (null == clearBtn) {
 			clearBtn = new JButton("清空");
 			clearBtn.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					dataField.setText("");					
+					inputArea.setText("");
 				}
 			});
 		}
 		return clearBtn;
 	}
-
+	
 	private Component getCopyBtn() {
-		if (null == autoCopyCheckBox) {
-			
-			autoCopyCheckBox = new JCheckBox("复制到粘贴版");
-			autoCopyCheckBox.setSelected(true);
-			/*copyBtn = new JButton("复制");
+		if (null == copyBtn) {
+			copyBtn = new JButton("复制");
 			copyBtn.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Utils.copyText2Clipboard(outputField.getText());					
+					Utils.copyText2Clipboard(outputArea.getText());
 				}
-			});*/
+			});
 		}
-		return autoCopyCheckBox;
-	}
-
-	private Component getPanelTop() {
-		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		jPanel.add(new JLabel("加密/解密字符:"));
-		jPanel.add(getJDataField());
-		jPanel.add(getClearBtn());
-		return jPanel;
-	}
-
-	private Component getJDataField() {
-		if (dataField == null) {
-			dataField = new JTextField(10);
-		}
-		return dataField;
-	}
-
-	private Component getPanelCenter() {
-		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		jPanel.add(new JLabel("密钥:"));
-		jPanel.add(getJPasswordField());
-		return jPanel;
-	}
-
-	private Component getJOutputArea() {
-		if (outputField == null) {
-			// outputArea = new JTextArea();
-			outputField = new JTextField(10);
-			outputField.setEditable(false);
-			// outputField.setSize(5000, 1000);
-			// outputField.setAutoscrolls(true);
-		}
-		return outputField;
-	}
-
-	private Component getPanelBottom() {
-		JPanel jPanel = new JPanel(new FlowLayout());
-		jPanel.add(getEncryptBtn());
-		jPanel.add(getDecryptBtn());
-		return jPanel;
-	}
-
-	private Component getJPasswordField() {
-		if (keyField == null) {
-			keyField = new JPasswordField(10);
-			keyField.setEchoChar('*');
-		}
-		return keyField;
+		return copyBtn;
 	}
 
 	private Component getEncryptBtn() {
@@ -181,30 +206,7 @@ public class MainFrame extends JFrame {
 			encryptBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					String data = dataField.getText().trim();
-					String key = new String(keyField.getPassword()).trim();
-					msgLabel.setText("");
-					if ("".equals(data)) {
-						msgLabel.setText("加密内容不能为空");
-						/*JOptionPane.showMessageDialog(null, "加密内容不能为空", "消息",
-								JOptionPane.INFORMATION_MESSAGE);*/
-					} else if ("".equals(key)) {
-						msgLabel.setText("密钥不能为空");
-						/*JOptionPane.showMessageDialog(null, "密钥不能为空", "消息",
-								JOptionPane.INFORMATION_MESSAGE);*/
-					} else {
-						try {
-							outputField.setText(Encryption.encrypt(data, key));
-							if (autoCopyCheckBox.isSelected()) {
-								Utils.copyText2Clipboard(outputField.getText());	
-								msgLabel.setText("已复制结果到剪贴版");
-							}
-						} catch (Exception e) {
-							msgLabel.setText("加密失败");
-							/*JOptionPane.showMessageDialog(null, "加密失败", "消息",
-									JOptionPane.ERROR_MESSAGE);*/
-						}
-					}
+					action(true);
 				}
 			});
 		}
@@ -217,27 +219,55 @@ public class MainFrame extends JFrame {
 			decryptBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					String data = dataField.getText().trim();
-					String key = new String(keyField.getPassword()).trim();
-					msgLabel.setText("");
-					if ("".equals(data)) {
-						msgLabel.setText("解密内容不能为空");
-					} else if ("".equals(key)) {
-						msgLabel.setText("密钥不能为空版");
-					} else {
-						try {
-							outputField.setText(Encryption.decrypt(data, key));
-							if (autoCopyCheckBox.isSelected()) {
-								Utils.copyText2Clipboard(outputField.getText());	
-							}
-						} catch (Exception e) {
-							msgLabel.setText("解密失败，请确认密钥是否正确");
-						}
-					}
+					action(false);
 				}
 			});
 		}
 		return decryptBtn;
 	}
 
+	/**
+	 * 加密解密事件
+	 * @param flag 为true时表示加密    false表示解密
+	 */
+	private void action(boolean flag) {
+		String data = inputArea.getText().trim();
+		String key = new String(keyField.getPassword()).trim();
+		msgLabel.setText("");
+		msgLabel.setForeground(null);
+		if ("".equals(data)) {
+			msgLabel.setForeground(Color.red);
+			msgLabel.setText("输入不能为空");
+			return;
+		}
+		if ("".equals(key)) {
+			msgLabel.setForeground(Color.red);
+			msgLabel.setText("密钥不能为空");
+			return;
+		}
+
+		String result = null;
+		/** 加密 */
+		if (flag) {
+			try {
+				result = Encryption.encrypt(data, key);
+			} catch (Exception e) {
+				msgLabel.setForeground(Color.red);
+				msgLabel.setText("加密失败");
+				return;
+			}
+		} else {
+			/** 解密 */
+			try {
+				result = Encryption.decrypt(data, key);
+			} catch (Exception e) {
+				msgLabel.setForeground(Color.red);
+				msgLabel.setText("解密失败，请确认密钥是否正确");
+				return;
+			}
+		}
+		outputArea.setText(result);
+		Utils.copyText2Clipboard(result);
+		msgLabel.setText("已复制结果到剪贴版");
+	}
 }

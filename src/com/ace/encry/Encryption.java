@@ -20,7 +20,7 @@ public class Encryption {
 
 	public static final String ALGORITHM = "DES";
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		if (args.length == 3) {
 			if ("-e".equalsIgnoreCase(args[0])) {
 				try {
@@ -39,6 +39,7 @@ public class Encryption {
 			}
 		} else {
 			printDesc();
+			test();
 		}
 
 	}
