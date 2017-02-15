@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -71,7 +72,8 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setIcon(){
-		Image image=Toolkit.getDefaultToolkit().createImage("file/icon.png");
+		URL url = this.getClass().getClassLoader().getResource("icon.png");
+		Image image=Toolkit.getDefaultToolkit().createImage(url);
 		this.setIconImage(image);
 	}
 
