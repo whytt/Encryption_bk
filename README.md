@@ -11,17 +11,18 @@
 ### 命令方式
 
 使用方法：
-加密：java -jar Encryption.jar -e express key
 
-解密：java -jar Encryption.jar -d ciphertext key
+加密：java -jar encryption_cmd.jar -e express key
+
+解密：java -jar encryption_cmd.jar -d ciphertext key
 
 如使用123密钥加密123456及解密
 
 ```
 $java -jar encryption_cmd.jar -e 123456 123
 加密后为：ItKgGw9Kp8w=
-$java -jar encryption_cmd.jar -e ItKgGw9Kp8w= 123
-密后为：123456
+$java -jar encryption_cmd.jar -d ItKgGw9Kp8w= 123
+解密后为：123456
 ```
 
 
