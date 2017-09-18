@@ -28,13 +28,17 @@ $java -jar encryption_cmd.jar -d ItKgGw9Kp8w= 123
 
 ### 界面方式
 
+运行 enctyption.bat
+
 ![use](./images/use.gif)
 
 #### 输入密钥和要加密的信息
 点击加密
+
 ![加密](./images/en.png)
 
 #### 输入密钥和要解密的密文
 点击解密
+
 ![解密](./images/de.png)
 
