@@ -22,13 +22,13 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import com.ace.encry.util.EncryptUtil;
-import com.ace.encry.util.Utils;
+import com.ace.encry.core.Encrypt;
+import com.ace.encry.utils.Utils;
 
 /**
  * 主窗口
  * 
- * @author Ace
+ * @author Liangsj
  * 
  */
 public class MainFrame extends JFrame {
@@ -72,12 +72,8 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setIcon(){
-<<<<<<< HEAD
-		Image image=Toolkit.getDefaultToolkit().createImage(getClass().getResource("icon.png"));
-=======
 		URL url = this.getClass().getClassLoader().getResource("icon.png");
 		Image image=Toolkit.getDefaultToolkit().createImage(url);
->>>>>>> ef5c1b2c960e8d414f9f9e75bc00c4c21024e6e7
 		this.setIconImage(image);
 	}
 
@@ -159,6 +155,7 @@ public class MainFrame extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					inputArea.setText("");
+					outputArea.setText("");
 					inputArea.requestFocus();
 				}
 			});
@@ -256,6 +253,7 @@ public class MainFrame extends JFrame {
 		String data = inputArea.getText().trim();
 		String key = new String(keyField.getPassword()).trim();
 		msgLabel.setText("");
+		outputArea.setText("");
 		msgLabel.setForeground(null);
 		if ("".equals(data)) {
 			msgLabel.setForeground(Color.red);
@@ -272,7 +270,7 @@ public class MainFrame extends JFrame {
 		/** 加密 */
 		if (flag) {
 			try {
-				result = EncryptUtil.encrypt(data, key);
+				result =Encrypt.encrypt(data, key);
 			} catch (Exception e) {
 				msgLabel.setForeground(Color.red);
 				msgLabel.setText("加密失败");
@@ -281,7 +279,7 @@ public class MainFrame extends JFrame {
 		} else {
 			/** 解密 */
 			try {
-				result = EncryptUtil.decrypt(data, key);
+				result =Encrypt.decrypt(data, key);
 			} catch (Exception e) {
 				msgLabel.setForeground(Color.red);
 				msgLabel.setText("解密失败，请确认密钥是否正确");

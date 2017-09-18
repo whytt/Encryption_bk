@@ -1,4 +1,4 @@
-package com.ace.encry.util;
+package com.ace.encry.core;
 
 import java.security.Key;
 import java.security.MessageDigest;
@@ -13,10 +13,10 @@ import sun.misc.BASE64Encoder;
 
 /**
  * 对字符进行加密及解密
- * @author Ace
+ * @author Liangsj
  *
  */
-public class EncryptUtil {
+public class Encrypt {
 
 	public static final String ALGORITHM = "DES";
 

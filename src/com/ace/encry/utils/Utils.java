@@ -1,4 +1,4 @@
-package com.ace.encry.util;
+package com.ace.encry.utils;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
