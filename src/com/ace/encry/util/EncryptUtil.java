@@ -39,15 +39,15 @@ public class EncryptUtil {
 			}
 		} else {
 			printDesc();
-			test();
+//			test();
 		}
 
 	}
 
 	public static void printDesc() {
 		System.out.println("使用方法：");
-		System.out.println("加密：java -jar Encryption.jar -e src key");
-		System.out.println("解密：java -jar Encryption.jar -d src key");
+		System.out.println("加密：java -jar Encryption.jar -e express key");
+		System.out.println("解密：java -jar Encryption.jar -d ciphertext key");
 	}
 
 	public static void test() throws Exception {
